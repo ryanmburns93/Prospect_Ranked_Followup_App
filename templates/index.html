@@ -15,35 +15,45 @@
           <br>
           <form role="form" ng-submit="getResults()">
             <div class="form-group">
-              <input type="text" name="url" class="form-control" id="url-box" placeholder="Enter URL..." style="max-width: 300px;" ng-model="url" required>
+              <select name="property" class="form-control" id="property-dropdown" placeholder="Select a property" style="max-width: 300px;" ng-model="property" required>
+                <option value="prop1">Property 1</option>
+                <option value="prop2">Property 2</option>
+                <option value="prop3">Property 3</option>
+                <option value="prop4">Property 4</option>
+              </select>
             </div>
             {% raw %}
-              <button type="submit" class="btn btn-primary" ng-disabled="loading">{{ submitButtonText }}</button>
+              <button type="submit" class="btn btn-primary" ng-disabled="loading">{{ refreshButtonText }}</button>
             {% endraw %}
           </form>
-          <div class="alert alert-danger" role="alert" ng-show='urlerror'>
+          <div class="alert alert-danger" role="alert" ng-show='propertyerror'>
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
-            <span>There was an error submitting your URL.<br>
-            Please check to make sure it is valid before trying again.</span>
+            <span>There was an error refreshing your prospects dashboard.<br>
+            Try refreshing the page and trying again.
+            </span>
           </div>
         </div>
         <div class="col-sm-5 col-sm-offset-1">
-          <h2>Frequencies</h2>
+          <h2>Prospects for Follow Up</h2>
           <br>
-          <div id="results">
+          <div id="prospects">
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>Word</th>
-                  <th>Count</th>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Transcript</th>
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="element in wordcounts">
+                <tr ng-repeat="element in prospects">
                   {% raw %}
                   <td>{{element[0]}}</td>
                   <td>{{element[1]}}</td>
+                  <td>{{element[2]}}</td>
+                  <td>{{element[3]}}</td>
                   {% endraw %}
                 </tr>
               </tbody>
@@ -53,7 +63,7 @@
         </div>
       </div>
       <br>
-      <word-count-chart data="wordcounts"></word-count-chart>
+      <prospect-chart data="prospects"></prospect-chart>
     </div>
     <br><br>
     <!-- scripts -->

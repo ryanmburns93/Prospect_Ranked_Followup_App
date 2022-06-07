@@ -24,10 +24,7 @@ New-Item -Path . -Name ".env" -ItemType "file"
 pip install -r requirements.txt
 ```
 
-Additionally, flair currently has a dependency on the sentencepiece library which does not have a compatible wheel for Python 3.10 to enable installation via pip. Instead, I recommend downloading and installing the sentencepiece library separately using the conda command below in Anaconda Prompt. After the install command is complete, copy the package files from /anaconda3/Lib/site-packages into your virtual environment at ./.venv/Lib/site-packages.
-```
-conda install -c sentencepiece
-```
+Additionally, the flair capability has been commented out for the time being. Flair currently has a dependency on the sentencepiece library which does not have a compatible wheel for Python 3.10 to enable installation via pip.
 
 Finally, run the below commands to install the NLTK and Textblob corpora to enable sentiment analysis and stopword removal from our messages.
 ```

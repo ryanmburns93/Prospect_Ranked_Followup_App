@@ -2,12 +2,12 @@
 
   'use strict';
 
-  angular.module('WordcountApp', [])
+  angular.module('ProspectApp', [])
 
-  .controller('WordcountController', ['$scope', '$log', '$http', '$timeout',
+  .controller('ProspectController', ['$scope', '$log', '$http', '$timeout',
     function($scope, $log, $http, $timeout) {
 
-    $scope.submitButtonText = 'Submit';
+    $scope.refreshButtonText = 'Refresh';
     $scope.loading = false;
     $scope.urlerror = false;
 
@@ -19,13 +19,13 @@
       var userInput = $scope.url;
 
       // fire the API request
-      $http.post('/start', {'url': userInput}).
+      $http.post('/refresh').
         success(function(results) {
           $log.log(results);
-          getWordCount(results);
-          $scope.wordcounts = null;
+          getProspects(results);
+          $scope.prospects = null;
           $scope.loading = true;
-          $scope.submitButtonText = 'Loading...';
+          $scope.refreshButtonText = 'Loading...';
           $scope.urlerror = false;
         }).
         error(function(error) {
@@ -34,7 +34,7 @@
 
     };
 
-    function getWordCount(jobID) {
+    function getProspects(jobID) {
 
       var timeout = '';
 
@@ -47,8 +47,8 @@
             } else if (status === 200){
               $log.log(data);
               $scope.loading = false;
-              $scope.submitButtonText = "Submit";
-              $scope.wordcounts = data;
+              $scope.refreshButtonText = "Refresh";
+              $scope.prospects = data;
               $timeout.cancel(timeout);
               return false;
             }
@@ -59,7 +59,7 @@
           error(function(error) {
             $log.log(error);
             $scope.loading = false;
-            $scope.submitButtonText = "Submit";
+            $scope.refreshButtonText = "Refresh";
             $scope.urlerror = true;
           });
       };
@@ -70,22 +70,22 @@
 
   }])
 
-  .directive('wordCountChart', ['$parse', function ($parse) {
+  .directive('prospectChart', ['$parse', function ($parse) {
     return {
       restrict: 'E',
       replace: true,
       template: '<div id="chart"></div>',
       link: function (scope) {
-        scope.$watch('wordcounts', function() {
+        scope.$watch('prospects', function() {
           d3.select('#chart').selectAll('*').remove();
-          var data = scope.wordcounts;
-          for (var word in data) {
-            var key = data[word][0];
-            var value = data[word][1];
+          var data = scope.prospects;
+          for (var person in data) {
+            var key = data[person][0];
+            var value = data[person][1];
             d3.select('#chart')
               .append('div')
               .selectAll('div')
-              .data(word)
+              .data(person)
               .enter()
               .append('div')
               .style('width', function() {
