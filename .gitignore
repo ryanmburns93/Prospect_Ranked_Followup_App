@@ -156,3 +156,6 @@ csv_temp/
 tmp/
 temp/
 *.csv
+
+# Propietary Files
+api_calling.py
