@@ -4,18 +4,21 @@ from werkzeug.utils import secure_filename
 from sentiment import *
 from api_calling import *
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 
-UPLOAD_FOLDER = './tmp/'
-ALLOWED_EXTENSIONS = set(['csv', 'xlsx'])
+
+load_dotenv('.env')
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER')
+ALLOWED_EXTENSIONS = os.getenv('ALLOWED_EXTENSIONS')
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 
 app = Flask(__name__, template_folder=tmpl_dir, static_folder=static_dir, static_url_path='')
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-if not os.path.exists('./tmp/'):
-    os.mkdir('./tmp/')
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+if not os.path.exists(UPLOAD_FOLDER):
+    os.mkdir(UPLOAD_FOLDER)
 
 
 def allowed_file(filename):
