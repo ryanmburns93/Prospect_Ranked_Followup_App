@@ -19,7 +19,7 @@
       var userInput = $scope.url;
 
       // fire the API request
-      $http.post('/refresh').
+      $http.post('/check_refresh_needed').
         success(function(results) {
           $log.log(results);
           getProspects(results);
@@ -69,6 +69,10 @@
     }
 
   }])
+
+  .controller('PropertiesController', function($scope) {
+    $scope.properties = ['Boston Lofts', 'Foxchase', 'Shenandoah'];
+  })
 
   .directive('prospectChart', ['$parse', function ($parse) {
     return {

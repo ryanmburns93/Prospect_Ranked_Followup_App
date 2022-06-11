@@ -156,3 +156,6 @@ csv_temp/
 tmp/
 temp/
 *.csv
+
+# Work In Progress
+sql_connection.py

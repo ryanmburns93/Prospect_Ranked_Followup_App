@@ -14,13 +14,8 @@
           <h1>Daily Prospect List</h1>
           <br>
           <form role="form" ng-submit="getResults()">
-            <div class="form-group">
-              <select name="property" class="form-control" id="property-dropdown" placeholder="Select a property" style="max-width: 300px;" ng-model="property" required>
-                <option value="prop1">Property 1</option>
-                <option value="prop2">Property 2</option>
-                <option value="prop3">Property 3</option>
-                <option value="prop4">Property 4</option>
-              </select>
+            <div class="form-group" ng-app="propertiesFeeder", ng-controller="PropertiesController">
+              <select name="property" class="form-control" id="property-dropdown" placeholder="Select a property" style="max-width: 300px;" ng-model="selectedProperty" required ng-options="item for item in properties"></select>
             </div>
             {% raw %}
               <button type="submit" class="btn btn-primary" ng-disabled="loading">{{ refreshButtonText }}</button>
