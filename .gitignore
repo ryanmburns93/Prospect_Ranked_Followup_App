@@ -159,3 +159,4 @@ temp/
 
 # Work In Progress
 sql_connection.py
+test_data/*

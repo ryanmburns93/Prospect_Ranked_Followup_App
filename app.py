@@ -6,7 +6,7 @@ from api_calling import *
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, MetaData, update, select, func
-from sqlalchemy.types import BIGINT, INTEGER, VARCHAR, FLOAT, DATETIME
+from sqlalchemy.types import BIGINT, INTEGER, VARCHAR, FLOAT, DATETIME, BOOLEAN, TINYTEXT
 import pyodbc  # Needs to be imported to support string connector of sql alchemy engine
 import urllib
 import os
@@ -91,7 +91,6 @@ def call_transcript_api():
         f.write(response.content)
     transcript_df = pd.read_csv(csv_file_path)
     return redirect(url_for('analyze_sentiment'), file=transcript_df)
-    return redirect(url_for('post_transcripts_to_db'), file=transcript_df)
 
 
 @app.route('/post_to_sql')
@@ -124,8 +123,54 @@ def post_transcripts_to_db(transcripts_df):
                           if_exists='append',
                           index=False,
                           chunksize=100,
-                          dtype={})
+                          dtype={'id': BIGINT,
+                                 'timeCreated': DATETIME,
+                                 'isInbound': BOOLEAN,
+                                 'messageType': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'messageStatus': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'classification': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'routedTo': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'leasingAttributionSource': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'leasingAttributionSourceDisplayName': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'addressFrom': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'addressTo': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'censoredShortBody': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'censoredTranslatedShortBody': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'isIlsInbound': BOOLEAN,
+                                 'mediaUrl': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'property': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'timeFirstMessage': DATETIME,
+                                 'firstName': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'lastName': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'email': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'phone': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'channel': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'source': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'unitTypes': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'tourType': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'qualified': BOOLEAN,
+                                 'timeLastMessage': DATETIME,
+                                 'conversationLengthInSeconds': BIGINT,
+                                 'countInboundMessages': INTEGER,
+                                 'countOutboundMessages': INTEGER,
+                                 'countCallsAttempted': INTEGER,
+                                 'countShowingsOffered': INTEGER,
+                                 'countShowingsRejected': INTEGER,
+                                 'countShowingsAccepted': INTEGER,
+                                 'countShowingsConfirmationSent': INTEGER,
+                                 'countShowingsConfirmed': INTEGER,
+                                 'countShowingsCanceledByProspect': INTEGER,
+                                 'countShowingsCanceledByLisa': INTEGER,
+                                 'lastAcceptedShowingId': BIGINT,
+                                 'isAcceptedShowingInPast': BOOLEAN,
+                                 'propertyCode': BIGINT,
+                                 'prospectCode': BIGINT,
+                                 'createdProspectSource': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'transcript': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS"),
+                                 'plannedNextMessage': BOOLEAN,
+                                 'applicationStatus': VARCHAR(250, collation="SQL_Latin1_General_CP1_CI_AS")})
     return
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5001)
